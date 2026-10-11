@@ -62,15 +62,19 @@ def _print_translation_suggestions(
 ) -> None:
     translations_by_word = fetch_dictionary_translations(german_words=german_words)
     for word, translations in translations_by_word.items():
+        print(f"**{word}**\n")
+        print("| Translation | Part of speech | Confidence | Back-translations |")
+        print("| --- | --- | ---: | --- |")
         for translation in translations:
             back_translations = ", ".join(
                 f"{back.display_text} ({back.frequency_count})"
                 for back in translation.back_translations
             )
             print(
-                f"{word}\t{translation.display_target}\t{translation.pos_tag}"
-                f"\t{translation.confidence}\t{back_translations}"
+                f"| {translation.display_target} | {translation.pos_tag}"
+                f" | {translation.confidence:.0%} | {back_translations} |"
             )
+        print()
 
 
 def _dispatch_command_from_cli() -> None:
@@ -81,8 +85,9 @@ def _dispatch_command_from_cli() -> None:
             '`build JSON`: take a JSON list of {"category", "front", "back"}, '
             "shaped like each category's example, validate each card and print it "
             "as a tab-separated Google Sheets row. "
-            "`lookup WORD...`: print Azure dictionary translations per German word "
-            "with part of speech, confidence and back-translations (needs the "
+            "`lookup WORD...`: print a Markdown table of Azure dictionary "
+            "translations per German word with part of speech, confidence and "
+            "back-translations with their frequency counts (needs the "
             "variables from `.env`)."
         )
     )
