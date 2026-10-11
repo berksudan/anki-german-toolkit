@@ -5,7 +5,13 @@ import pathlib
 import re
 import time
 
-from scripts.shared import CATEGORY_TO_FORMAT, AnkiCard, CardCategory, ColorCode
+from scripts.shared import (
+    CATEGORY_TO_FORMAT,
+    NO_PLURAL,
+    AnkiCard,
+    CardCategory,
+    ColorCode,
+)
 
 
 class _Preposition(enum.StrEnum):
@@ -203,7 +209,7 @@ def _resolve_token(token: str) -> str | None:
         case "OPTIONAL_PLURAL":
             sel = input("   > Does this word have a plural form? (Y/n): ").lower()
             if sel == "n":
-                return "NO PLURAL"
+                return NO_PLURAL
             plural = _prompt_alphabetic_word(
                 prompt="Enter a plural noun without artikel", normalize=str.title
             )

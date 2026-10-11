@@ -9,6 +9,7 @@ import pydantic
 from scripts.azure_translator import fetch_dictionary_translations
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
+    NO_PLURAL,
     TRANSLATION_SEPARATOR,
     AnkiCard,
     CardCategory,
@@ -30,6 +31,7 @@ class _DraftCard(pydantic.BaseModel):
 
 def _print_suggestible_categories() -> None:
     print(f"Translation separator: {TRANSLATION_SEPARATOR!r}")
+    print(f"{{OPTIONAL_PLURAL}} for a noun without a plural: {NO_PLURAL!r}")
     for category, card_format in CATEGORY_TO_FORMAT.items():
         if category is not CardCategory.ENG_TO_DEU:
             print(f"{category}\t{card_format.template}\te.g. {card_format.example}")
@@ -80,7 +82,8 @@ def _print_translation_suggestions(
 def _dispatch_command_from_cli() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "`list`: print the translation separator and the suggestible "
+            "`list`: print the translation separator, the no-plural value and "
+            "the suggestible "
             "categories with their `front;back` format and an example card. "
             '`build JSON`: take a JSON list of {"category", "front", "back"}, '
             "shaped like each category's example, validate each card and print it "

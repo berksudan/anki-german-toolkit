@@ -9,7 +9,7 @@ argument-hint: <German word> [more words...]
 
 Words: $ARGUMENTS
 
-1. Run `.venv/bin/python -m scripts.suggest_anki_cards_cli list` for the categories, their card formats with an example card each, and the translation separator. Never work from memory.
+1. Run `.venv/bin/python -m scripts.suggest_anki_cards_cli list` for the categories, their card formats with an example card each, the translation separator and the no-plural value. Never work from memory.
 2. For each word, suggest only the categories whose example shows it fits, up to 4. Ask with one multi-select `AskUserQuestion` question per word.
 3. Draft one card per selected category, shaped like its example and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. For an English translation:
    - Run `uv run --env-file .env python -m scripts.suggest_anki_cards_cli lookup <German word>` and treat its candidates as suggestions, weighed by confidence and back-translations against the rules below; stop and show the error if it fails.
