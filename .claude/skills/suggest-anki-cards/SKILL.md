@@ -9,7 +9,7 @@ argument-hint: <German word> [more words...]
 
 Words: $ARGUMENTS
 
-1. Run `.venv/bin/python -m scripts.suggest_anki_cards_cli list` for the categories, their card formats with an example card each, the translation separator and the no-plural value. Never work from memory.
+1. Run `.venv/bin/python -m scripts.suggest_anki_cards_cli list` for the categories with their formats and example cards, the translation separator and the no-plural value; never work from memory.
 2. For each word, suggest only the categories whose example shows it fits, up to 4. Ask with one multi-select `AskUserQuestion` question per word.
 3. Draft one card per selected category, shaped like its example and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. For an English translation:
    - Run `uv run --env-file .env python -m scripts.suggest_anki_cards_cli lookup <German word>` and treat its candidates as suggestions, weighed by confidence and back-translations against the rules below; stop and show the error if it fails.
@@ -17,5 +17,5 @@ Words: $ARGUMENTS
    - Start verbs with `to`, and mark `[adj]`, `[adv]` or `[pl]` on the German word and every translation, e.g. `witzig [adj]` → `witty [adj]`. For a person noun that has both a male and a female form, mark `[m.]` or `[f.]` on every translation, and also on the German word when its form is the same for both genders, e.g. `Prominente [f.]` → `celebrity [f.]` but `Richterin` → `judge [f.]`. Every translation's `sth.`/`sb.` must match the German word's `etw.`/`jmdn.`/`jmdm.`, e.g. `etw. ab*geben` → `to submit sth.`; leave out senses that don't.
    - If the card could still be read as another of the lookup's back-translations, add the fewest suffix tags (such as `[noun]`) and/or `(e.g. …)` usage examples until it can't, without repeating the translation.
    - Justify each word's translation once, before the code block, in one short sentence followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the word and its translation in `***…***`, preceded by that word's `lookup` output printed unchanged.
-4. Pass the drafts as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not write any files.
+4. Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off. Pass the drafts as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not write any files.
 5. Copy that same output to the clipboard, keeping the tabs.
