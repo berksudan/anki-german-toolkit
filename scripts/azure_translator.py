@@ -1,5 +1,6 @@
 import collections.abc
 import decimal
+import itertools
 import json
 import os
 import urllib.request
@@ -8,6 +9,7 @@ import pydantic
 from pydantic.alias_generators import to_camel
 
 _DICTIONARY_LOOKUP_URL = "https://api.cognitive.microsofttranslator.com/dictionary/lookup?api-version=3.0&from=de&to=en"
+_MAX_WORDS_PER_REQUEST = 10
 
 
 class BackTranslation(pydantic.BaseModel):
@@ -29,13 +31,12 @@ class _DictionaryLookupResult(pydantic.BaseModel):
     translations: tuple[DictionaryTranslation, ...]
 
 
-def fetch_dictionary_translations(
+def _fetch_dictionary_lookup_results(
     *, german_words: collections.abc.Collection[str]
-) -> dict[str, tuple[DictionaryTranslation, ...]]:
-    unique_german_words = list(dict.fromkeys(german_words))
+) -> tuple[_DictionaryLookupResult, ...]:
     request = urllib.request.Request(
         _DICTIONARY_LOOKUP_URL,
-        data=json.dumps([{"Text": word} for word in unique_german_words]).encode(),
+        data=json.dumps([{"Text": word} for word in german_words]).encode(),
         headers={
             "Ocp-Apim-Subscription-Key": os.environ["AZURE_TRANSLATOR_KEY"],
             "Ocp-Apim-Subscription-Region": os.environ["AZURE_TRANSLATOR_REGION"],
@@ -44,9 +45,22 @@ def fetch_dictionary_translations(
         method="POST",
     )
     with urllib.request.urlopen(request) as response:
-        results = pydantic.TypeAdapter(
-            tuple[_DictionaryLookupResult, ...]
-        ).validate_json(response.read())
+        return pydantic.TypeAdapter(tuple[_DictionaryLookupResult, ...]).validate_json(
+            response.read()
+        )
+
+
+def fetch_dictionary_translations(
+    *, german_words: collections.abc.Collection[str]
+) -> dict[str, tuple[DictionaryTranslation, ...]]:
+    unique_german_words = list(dict.fromkeys(german_words))
+    results = [
+        result
+        for german_words_batch in itertools.batched(
+            unique_german_words, _MAX_WORDS_PER_REQUEST
+        )
+        for result in _fetch_dictionary_lookup_results(german_words=german_words_batch)
+    ]
     return {
         word: result.translations
         for word, result in zip(unique_german_words, results, strict=True)
