@@ -23,7 +23,7 @@ Words: $ARGUMENTS
 4. Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off. Then merge each word's translation cards of one category with the translation separator into `a` → `b | c`.
 5. For each word with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the word and its translation in `***…***`.
 6. Pass the merged cards as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not write any files.
-7. Copy that same output to the clipboard, keeping the tabs.
+7. Copy that same output to the clipboard, keeping the tabs and without a trailing newline.
 
 ## QUIZFRAGE Card Wording
 
