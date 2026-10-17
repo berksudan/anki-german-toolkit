@@ -11,7 +11,7 @@ Words: $ARGUMENTS
 
 1. Run `.venv/bin/python -m scripts.suggest_anki_cards_cli list` for the categories with their formats and example cards, the translation separator and the no-plural value; never work from memory.
 2. For each word, suggest only the categories whose example shows it fits, up to 4. Ask with one multi-select `AskUserQuestion` question per word. For given cards to check, keep their categories instead.
-3. Draft one card per selected category, shaped like its example, in plain text without HTML tags such as `<br>` unless the example has them, and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. Draft each English translation as its own card, e.g. `a` → `b` and `a` → `c`, and apply these rules to each:
+3. Draft one card per selected category, shaped like its example, in plain text without HTML tags such as `<br>` unless the example has them, and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. Draft a `QUIZFRAGE` card following `QUIZFRAGE Card Wording`. Draft each English translation as its own card, e.g. `a` → `b` and `a` → `c`, and apply these rules to each:
    - Synthesize the best translation from all translation sources, trusting them in this order without discarding a lower source just because a higher one has an answer:
      1. Translator: run `uv run --env-file .env python -m scripts.suggest_anki_cards_cli lookup <German word>` and weigh its candidates by confidence and back-translations; stop and show the error if it fails.
      2. Online searches.
@@ -24,6 +24,17 @@ Words: $ARGUMENTS
 5. For each word with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the word and its translation in `***…***`.
 6. Pass the merged cards as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not write any files.
 7. Copy that same output to the clipboard, keeping the tabs.
+
+## QUIZFRAGE Card Wording
+
+- Test one fact per `QUIZFRAGE` card, splitting a combined question into several cards.
+- Word a `QUIZFRAGE` front so it has exactly one definite answer, never as an open-ended comparison or explanation.
+- Write a `QUIZFRAGE` card in German, joining the options on its front with ` ODER ` when the answer is a choice, keeping it to the few options the rule really has.
+- Give a `QUIZFRAGE` front only enough context to rule out other correct answers, without hinting at the answer.
+- Put the bare answer on a `QUIZFRAGE` back, with at most one short example in parentheses.
+- Keep hedges such as `meistens` off a `QUIZFRAGE` back; narrow the question or move the exception to its own card until the answer always holds.
+- Split a `QUIZFRAGE` answer that is a list into one card per item.
+- Cover an important rule with `QUIZFRAGE` cards from both directions, rule → example and example → rule.
 
 ## Category Names
 
