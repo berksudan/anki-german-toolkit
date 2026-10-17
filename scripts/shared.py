@@ -11,6 +11,7 @@ class CardCategory(enum.StrEnum):
     ADJEKTIVDEKLINATION_AKK = "ADJEKTIVDEKLINATION ⋀ AKKUSATIV"
     ADJEKTIVDEKLINATION_DATIV = "ADJEKTIVDEKLINATION ⋀ DATIV"
     ADJEKTIVDEKLINATION_NOMINATIV_BESTIMMT = "ADJEKTIVDEKLINATION ⋀ NOMINATIV"
+    ADVERBIALE_ANGABE_TEKAMOLO = "ADVERBIALE ANGABE (TE/KA/MO/LO)"
     AKKUSATIVFORM = "AKKUSATIVFORM"
     ARTIKEL_PLURAL = "ARTIKEL ⋀ PLURAL"
     AUF_DEUTSCH = "AUF DEUTSCH"
@@ -107,6 +108,9 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     CardCategory.QUIZFRAGE: CardFormat(
         template="{STR_ANY_1};{STR_ANY_2}",
         example="helfen + DATIV or helfen + AKKUSATIV?;helfen + DATIV",
+    ),
+    CardCategory.ADVERBIALE_ANGABE_TEKAMOLO: CardFormat(
+        template="{STR_GERMAN_1};{STR_GERMAN_2}", example="nach dem Essen;TE (Temporal)"
     ),
 }
 
