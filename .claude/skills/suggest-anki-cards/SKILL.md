@@ -1,6 +1,6 @@
 ---
 name: suggest-anki-cards
-description: Suggest Anki card categories for German words and print the chosen cards as rows to paste into Google Sheets.
+description: Suggest Anki card categories for German words and print the chosen cards as rows to paste into a spreadsheet (Proton Sheets, Google Sheets, Excel, etc.).
 disable-model-invocation: true
 argument-hint: <German word> [more words...]
 ---

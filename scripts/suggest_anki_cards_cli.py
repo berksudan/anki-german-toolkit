@@ -87,7 +87,7 @@ def _dispatch_command_from_cli() -> None:
             "categories with their `front;back` format and an example card. "
             '`build JSON`: take a JSON list of {"category", "front", "back"}, '
             "shaped like each category's example, validate each card and print it "
-            "as a tab-separated Google Sheets row. "
+            "as a tab-separated spreadsheet row. "
             "`lookup WORD...`: print a Markdown table of Azure dictionary "
             "translations per German word with part of speech, confidence and "
             "back-translations with their frequency counts (needs the "
