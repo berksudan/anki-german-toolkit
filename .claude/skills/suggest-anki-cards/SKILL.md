@@ -24,3 +24,12 @@ Words: $ARGUMENTS
 5. For each word with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the word and its translation in `***…***`.
 6. Pass the merged cards as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not write any files.
 7. Copy that same output to the clipboard, keeping the tabs.
+
+## Category Names
+
+- Create or rename a category in `CardCategory` and `CATEGORY_TO_FORMAT` in `scripts/shared.py`, never only in a drafted card.
+- Write a category name as upper-case German grammar terms with umlauts kept, naming the front's item before what the back tests, e.g. `PRÄPOSITION REKTION`.
+- Pick the precise grammar term over a word with an everyday meaning, e.g. `ADVERBIALE ANGABE` over `ANGABE`.
+- Join two tested properties in a category name with ` ⋀ `, e.g. `ARTIKEL ⋀ PLURAL`, and put its scope or answer options in parentheses, e.g. `KONJUGATION (ICH/DU/ES)`.
+- Keep `:` out of category names, since `AnkiCard` splits a card's front on `: `.
+- Name a `CardCategory` member after the value in ASCII upper snake case with umlauts spelled `AE`/`OE`/`UE`, e.g. `PRAEPOSITION_REKTION`, and keep members alphabetical.
