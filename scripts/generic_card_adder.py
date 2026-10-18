@@ -4,7 +4,9 @@ import enum
 import pathlib
 import re
 import time
+import typing
 
+from scripts.anki_connect import add_anki_card
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
     NO_PLURAL,
@@ -31,6 +33,11 @@ class _Preposition(enum.StrEnum):
     VON = "VON"
     VOR = "VOR"
     ZU = "ZU"
+
+
+class _CardDestination(enum.StrEnum):
+    ANKI_CONNECT = "ankiconnect"
+    FILE = "file"
 
 
 class _Artikel(enum.StrEnum):
@@ -99,7 +106,7 @@ def _select_card_category() -> CardCategory:
             print("> Please enter a valid integer!")
 
 
-def _enter_from_options(an_enum: type[enum.StrEnum]) -> str:
+def _enter_from_options[OptionT: enum.StrEnum](an_enum: type[OptionT]) -> OptionT:
     options_str = ", ".join([f"`{x}`" for x in an_enum])
     input_str = f"Enter an option ({options_str})"
     input_str_with_err = f"Wrong option entered! {input_str}"
@@ -266,7 +273,7 @@ def _check_initial_file_content(filepath: pathlib.Path) -> None:
         time.sleep(1.5)
 
 
-def anki_deutsch_adder(filepath: pathlib.Path):
+def _write_cards_to_file(filepath: pathlib.Path) -> None:
     _check_initial_file_content(filepath=filepath)
     while True:
         try:
@@ -285,5 +292,27 @@ def anki_deutsch_adder(filepath: pathlib.Path):
             print(ColorCode.STYLE_RESET_ALL)
 
 
+def _add_cards_to_anki() -> None:
+    while True:
+        try:
+            new_card: AnkiCard = _build_new_card()
+            add_anki_card(card=new_card)
+            print(f"[INFO] Added to Anki: `{new_card.to_colored_str}`")
+        except KeyboardInterrupt as e:
+            print(f"\n> Got: {e}, exiting..")
+            break
+
+
+def anki_deutsch_adder() -> None:
+    print("> Choose where new cards go:")
+    match _enter_from_options(_CardDestination):
+        case _CardDestination.FILE:
+            _write_cards_to_file(filepath=pathlib.Path("output/new_anki_cards.csv"))
+        case _CardDestination.ANKI_CONNECT:
+            _add_cards_to_anki()
+        case unreachable:
+            typing.assert_never(unreachable)
+
+
 if __name__ == "__main__":
-    anki_deutsch_adder(filepath=pathlib.Path("output/new_anki_cards.csv"))
+    anki_deutsch_adder()
