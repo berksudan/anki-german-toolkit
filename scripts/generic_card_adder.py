@@ -1,4 +1,5 @@
 import collections.abc
+import contextlib
 import dataclasses
 import enum
 import pathlib
@@ -6,6 +7,7 @@ import re
 import time
 import typing
 
+from scripts.anki_card_editor import edit_card_in_anki
 from scripts.anki_connect_client import AnkiConnectClient
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
@@ -35,8 +37,9 @@ class _Preposition(enum.StrEnum):
     ZU = "ZU"
 
 
-class _CardDestination(enum.StrEnum):
+class _SessionMode(enum.StrEnum):
     ANKI_CONNECT = "ankiconnect"
+    EDIT = "edit"
     FILE = "file"
 
 
@@ -292,33 +295,50 @@ def _write_cards_to_file(filepath: pathlib.Path) -> None:
             print(ColorCode.STYLE_RESET_ALL)
 
 
-def _add_cards_until_interrupted(*, anki_connect_client: AnkiConnectClient) -> None:
+def _add_card_to_anki(*, anki_connect_client: AnkiConnectClient) -> None:
+    new_card: AnkiCard = _build_new_card()
+    anki_connect_client.add_card(card=new_card)
+    print(f"[INFO] Added to Anki: `{new_card.to_colored_str}`")
+
+
+def _repeat_until_interrupted(*, action: collections.abc.Callable[[], None]) -> None:
     while True:
         try:
-            new_card: AnkiCard = _build_new_card()
-            anki_connect_client.add_card(card=new_card)
-            print(f"[INFO] Added to Anki: `{new_card.to_colored_str}`")
+            action()
         except KeyboardInterrupt as e:
             print(f"\n> Got: {e}, exiting..")
             break
 
 
-def _add_cards_to_anki() -> None:
+@contextlib.contextmanager
+def _open_synced_anki_session() -> collections.abc.Generator[AnkiConnectClient]:
     anki_connect_client = AnkiConnectClient()
     try:
-        _add_cards_until_interrupted(anki_connect_client=anki_connect_client)
+        yield anki_connect_client
     finally:
         anki_connect_client.sync()
         print("[INFO] Synced Anki with AnkiWeb.")
 
 
 def anki_deutsch_adder() -> None:
-    print("> Choose where new cards go:")
-    match _enter_from_options(_CardDestination):
-        case _CardDestination.FILE:
+    print("> Choose a mode:")
+    match _enter_from_options(_SessionMode):
+        case _SessionMode.FILE:
             _write_cards_to_file(filepath=pathlib.Path("output/new_anki_cards.csv"))
-        case _CardDestination.ANKI_CONNECT:
-            _add_cards_to_anki()
+        case _SessionMode.ANKI_CONNECT:
+            with _open_synced_anki_session() as anki_connect_client:
+                _repeat_until_interrupted(
+                    action=lambda: _add_card_to_anki(
+                        anki_connect_client=anki_connect_client
+                    )
+                )
+        case _SessionMode.EDIT:
+            with _open_synced_anki_session() as anki_connect_client:
+                _repeat_until_interrupted(
+                    action=lambda: edit_card_in_anki(
+                        anki_connect_client=anki_connect_client
+                    )
+                )
         case unreachable:
             typing.assert_never(unreachable)
 
