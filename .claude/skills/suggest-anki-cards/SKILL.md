@@ -27,15 +27,16 @@ Words: $ARGUMENTS
 
 ## QUIZFRAGE Card Wording
 
+- Treat these `QUIZFRAGE` wording rules as defaults, not a checklist: judge each card by how well it teaches, and break a rule when following it makes the card worse, saying which rule and why.
 - Test one fact per `QUIZFRAGE` card, splitting a combined question into several cards.
 - Word a `QUIZFRAGE` front so it has exactly one definite answer, never as an open-ended comparison or explanation.
-- Write a `QUIZFRAGE` card in German, joining the options on its front with ` ODER ` when the answer is a choice, keeping it to the few options the rule really has.
+- Write a `QUIZFRAGE` card in German, joining the options on its front with ` ODER ` only when picking among them takes real knowledge; ask for free recall instead when the choice is a near 50/50 guess or the front already gives the answer away.
 - Word a `QUIZFRAGE` front for the fastest possible review, so it is understood at a glance, e.g. `geben + (DATIV ODER AKKUSATIV ODER BEIDE)?`.
 - Give a `QUIZFRAGE` front only enough context to rule out other correct answers, without hinting at the answer.
-- Put the bare answer on a `QUIZFRAGE` back, with at most one short example in parentheses.
+- Put the bare answer on a `QUIZFRAGE` back, adding one short example in parentheses only when it shows something the answer alone doesn't.
 - Keep hedges such as `meistens` off a `QUIZFRAGE` back; narrow the question or move the exception to its own card until the answer always holds.
 - Split a `QUIZFRAGE` answer that is a list into one card per item.
-- Cover an important rule with `QUIZFRAGE` cards from both directions, rule → example and example → rule.
+- Cover an important rule with `QUIZFRAGE` cards from both directions, rule → example and example → rule, when each direction practises something the other doesn't.
 
 ## Category Names
 
