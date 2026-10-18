@@ -29,7 +29,7 @@ class CardCategory(enum.StrEnum):
     KONJUGATION_ICH_DU_ES = "KONJUGATION (ICH/DU/ES)"
     KONJUGATION_WIR_IHR_SIE = "KONJUGATION (WIR/IHR/SIE)"
     LOKALE_PRAEPOSITION_BEDEUTUNG = "LOKALE PRÄPOSITION BEDEUTUNG"
-    PRAEPOSITION_AKK_DATIV = "PRÄPOSITION ⋀ AKKUSATIV/DATIV"
+    PRAEPOSITIONALERGAENZUNG_AKK_DATIV = "PRÄPOSITIONALERGÄNZUNG (AKKUSATIV/DATIV)"
     PRAEPOSITION_REKTION = "PRÄPOSITION REKTION"
     PRAETERITUM_HAT_IST_PERFEKT = "PRÄTERITUM ⋀ HAT/IST + PERFEKT"
     QUIZFRAGE = "QUIZFRAGE"
@@ -95,7 +95,7 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
         template="{VERB_PRESENT};{WIR_IHR_SIE}",
         example="mitnehmen;wir nehmen mit<br>ihr nehmt mit<br>Sie/sie nehmen mit",
     ),
-    CardCategory.PRAEPOSITION_AKK_DATIV: CardFormat(
+    CardCategory.PRAEPOSITIONALERGAENZUNG_AKK_DATIV: CardFormat(
         template="{VERB_PRESENT};{VERB_PRESENT} + {PREPOSITION} + {AKK_DAT}",
         example="sich interessieren;sich interessieren + FÜR + AKKUSATIV",
     ),
