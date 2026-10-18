@@ -107,7 +107,7 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     ),
     CardCategory.QUIZFRAGE: CardFormat(
         template="{STR_ANY_1};{STR_ANY_2}",
-        example="helfen + DATIV ODER helfen + AKKUSATIV?;helfen + DATIV",
+        example="helfen + (DATIV ODER AKKUSATIV)?;helfen + DATIV",
     ),
     CardCategory.ADVERBIALE_ANGABE_TEKAMOLO: CardFormat(
         template="{STR_GERMAN_1};{STR_GERMAN_2}", example="nach dem Essen;TE (Temporal)"

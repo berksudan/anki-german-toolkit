@@ -30,6 +30,7 @@ Words: $ARGUMENTS
 - Test one fact per `QUIZFRAGE` card, splitting a combined question into several cards.
 - Word a `QUIZFRAGE` front so it has exactly one definite answer, never as an open-ended comparison or explanation.
 - Write a `QUIZFRAGE` card in German, joining the options on its front with ` ODER ` when the answer is a choice, keeping it to the few options the rule really has.
+- Word a `QUIZFRAGE` front so it is understood at a glance for a fast review, stating shared words once and grouping the options after them, e.g. `geben + (DATIV ODER AKKUSATIV ODER BEIDE)?`.
 - Give a `QUIZFRAGE` front only enough context to rule out other correct answers, without hinting at the answer.
 - Put the bare answer on a `QUIZFRAGE` back, with at most one short example in parentheses.
 - Keep hedges such as `meistens` off a `QUIZFRAGE` back; narrow the question or move the exception to its own card until the answer always holds.
