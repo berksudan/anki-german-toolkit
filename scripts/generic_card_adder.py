@@ -6,7 +6,7 @@ import re
 import time
 import typing
 
-from scripts.anki_connect import add_anki_card
+from scripts.anki_connect_client import AnkiConnectClient
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
     NO_PLURAL,
@@ -292,15 +292,24 @@ def _write_cards_to_file(filepath: pathlib.Path) -> None:
             print(ColorCode.STYLE_RESET_ALL)
 
 
-def _add_cards_to_anki() -> None:
+def _add_cards_until_interrupted(*, anki_connect_client: AnkiConnectClient) -> None:
     while True:
         try:
             new_card: AnkiCard = _build_new_card()
-            add_anki_card(card=new_card)
+            anki_connect_client.add_card(card=new_card)
             print(f"[INFO] Added to Anki: `{new_card.to_colored_str}`")
         except KeyboardInterrupt as e:
             print(f"\n> Got: {e}, exiting..")
             break
+
+
+def _add_cards_to_anki() -> None:
+    anki_connect_client = AnkiConnectClient()
+    try:
+        _add_cards_until_interrupted(anki_connect_client=anki_connect_client)
+    finally:
+        anki_connect_client.sync()
+        print("[INFO] Synced Anki with AnkiWeb.")
 
 
 def anki_deutsch_adder() -> None:
