@@ -25,6 +25,7 @@ class CardCategory(enum.StrEnum):
     IMPERATIV_DU_FORM = "IMPERATIV DU-FORM"
     IMPERATIV_IHR_FORM = "IMPERATIV IHR-FORM"
     IMPERATIV_SIE_FORM = "IMPERATIV SIE-FORM"
+    KOLLOKATION_VERB = "KOLLOKATION VERB"
     KOMPARATIV_SUPERLATIV = "KOMPARATIV ⋀ SUPERLATIV"
     KONJUGATION_ICH_DU_ES = "KONJUGATION (ICH/DU/ES)"
     KONJUGATION_WIR_IHR_SIE = "KONJUGATION (WIR/IHR/SIE)"
@@ -111,6 +112,10 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     ),
     CardCategory.ADVERBIALE_ANGABE_TEKAMOLO: CardFormat(
         template="{STR_GERMAN_1};{STR_GERMAN_2}", example="nach dem Essen;TE (Temporal)"
+    ),
+    CardCategory.KOLLOKATION_VERB: CardFormat(
+        template="{STR_GERMAN_1};{STR_GERMAN_2}",
+        example="ein gutes Verhältnis zu jmdm.;haben",
     ),
 }
 
