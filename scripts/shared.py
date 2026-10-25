@@ -61,8 +61,8 @@ class SuffixTag(enum.Enum):
     INFORMAL = SuffixTagSpec(text="[infml]", language=SuffixTagLanguage.EITHER)
     MASCULINE = SuffixTagSpec(text="[m.]", language=SuffixTagLanguage.EITHER)
     NOUN = SuffixTagSpec(text="[noun]", language=SuffixTagLanguage.EITHER)
-    PARTIZIP_PERFEKT = SuffixTagSpec(text="[pp]", language=SuffixTagLanguage.GERMAN)
-    PAST_PARTICIPLE = SuffixTagSpec(text="[v3]", language=SuffixTagLanguage.ENGLISH)
+    PARTIZIP_II = SuffixTagSpec(text="[part.II]", language=SuffixTagLanguage.GERMAN)
+    PAST_PARTICIPLE = SuffixTagSpec(text="[pp]", language=SuffixTagLanguage.ENGLISH)
     PLURAL = SuffixTagSpec(text="[pl]", language=SuffixTagLanguage.EITHER)
     SINGULAR = SuffixTagSpec(text="[sg]", language=SuffixTagLanguage.EITHER)
 
