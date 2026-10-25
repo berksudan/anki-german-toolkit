@@ -39,6 +39,34 @@ class CardCategory(enum.StrEnum):
     TEMPORALE_PRAEPOSITION_BEDEUTUNG = "TEMPORALE PRÄPOSITION BEDEUTUNG"
 
 
+class SuffixTagLanguage(enum.Enum):
+    ENGLISH = "English"
+    EITHER = "German or English"
+    GERMAN = "German"
+
+
+@dataclasses.dataclass(frozen=True, kw_only=True, slots=True)
+class SuffixTagSpec:
+    text: str
+    language: SuffixTagLanguage
+
+
+@enum.unique
+class SuffixTag(enum.Enum):
+    ADJECTIVE = SuffixTagSpec(text="[adj]", language=SuffixTagLanguage.EITHER)
+    ADVERB = SuffixTagSpec(text="[adv]", language=SuffixTagLanguage.EITHER)
+    CONJUNCTION = SuffixTagSpec(text="[conj]", language=SuffixTagLanguage.EITHER)
+    FEMININE = SuffixTagSpec(text="[f.]", language=SuffixTagLanguage.EITHER)
+    FORMAL = SuffixTagSpec(text="[frml]", language=SuffixTagLanguage.EITHER)
+    INFORMAL = SuffixTagSpec(text="[infml]", language=SuffixTagLanguage.EITHER)
+    MASCULINE = SuffixTagSpec(text="[m.]", language=SuffixTagLanguage.EITHER)
+    NOUN = SuffixTagSpec(text="[noun]", language=SuffixTagLanguage.EITHER)
+    PARTIZIP_PERFEKT = SuffixTagSpec(text="[pp]", language=SuffixTagLanguage.GERMAN)
+    PAST_PARTICIPLE = SuffixTagSpec(text="[v3]", language=SuffixTagLanguage.ENGLISH)
+    PLURAL = SuffixTagSpec(text="[pl]", language=SuffixTagLanguage.EITHER)
+    SINGULAR = SuffixTagSpec(text="[sg]", language=SuffixTagLanguage.EITHER)
+
+
 NO_PLURAL = "NO PLURAL"
 TRANSLATION_SEPARATOR = " | "
 
