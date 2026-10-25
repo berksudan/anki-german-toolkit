@@ -4,7 +4,7 @@
 ## AnkiConnect
 
 - Scripts read and write the live Anki collection through the AnkiConnect add-on (code `2055492159`), installed in Anki via Tools → Add-ons → Get Add-ons, followed by an Anki restart.
-- AnkiConnect only answers while the Anki desktop app is open; check it with `curl -s localhost:8765 -X POST -d '{"action":"version","version":6}'`, which returns `{"result": 6, "error": null}`.
+- AnkiConnect only answers while the Anki desktop app is open; check it with `curl -s localhost:8765 -X POST -d '{"action":"version","version":6}'`, which returns `{"result": 6, "error": null}`; when a task needs AnkiConnect and it doesn't answer, start Anki first (e.g. `anki` in the background) and wait until it answers.
 - `scripts/anki_connect_client.py` (`AnkiConnectClient`) talks to AnkiConnect at `http://127.0.0.1:8765` (the add-on's default bind address and port) and works on the deck `ANKI_DECK_NAME` with the note type `ANKI_NOTE_TYPE_NAME`, both read from `.env` (see `.env.example`) and both required to exist in the collection.
 - `AnkiConnectClient` methods: `add_card`, `find_all_cards`, `find_cards` (a non-empty Anki browser search, e.g. `PRÄPOSITION*` or `leben or haben`, wrapped in brackets so it stays limited to that deck and note type), both returning `StoredAnkiCard` with the `note_id`, `update_card` and `delete_card` (both by `note_id`), and `sync` (Anki's regular AnkiWeb sync; the other methods only change the local collection).
 - AnkiConnect request and reply shapes live in `scripts/anki_connect_models.py`, and the HTTP calls with their error checks in `scripts/anki_connect_transport.py`.
