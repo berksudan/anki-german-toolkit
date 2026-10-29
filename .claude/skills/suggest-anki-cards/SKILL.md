@@ -1,7 +1,6 @@
 ---
 name: suggest-anki-cards
 description: Suggest Anki card categories for German words, sentences or given cards to check, and print the chosen cards as rows to paste into a spreadsheet (Proton Sheets, Google Sheets, Excel, etc.).
-disable-model-invocation: true
 argument-hint: <German words, sentences or cards to check>
 allowed-tools:
   - Bash(.venv/bin/python -m scripts.suggest_anki_cards_cli *)
@@ -24,13 +23,13 @@ Category abbreviations the input may use:
 !`.venv/bin/python -m scripts.suggest_anki_cards_cli list`
 
 1. Work from the `list` output above for categories, formats, separators and suffix tags; never work from memory.
-2. For each input entry (a word, phrase or fact), use the categories the input names; otherwise ask with one multi-select `AskUserQuestion` question per entry, offering up to 4 categories whose example shows the entry fits, with `QUIZFRAGE` only as a last resort per `QUIZFRAGE Card Selection and Wording`.
+2. For each input entry, use the categories the input names; otherwise ask with one multi-select `AskUserQuestion` question per entry, offering up to 4 categories whose example shows the entry fits, with `QUIZFRAGE` only as a last resort per `QUIZFRAGE Card Selection and Wording`.
 3. Draft one card per selected category, shaped like its example, in plain text without HTML tags such as `<br>` unless the example has them, and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. Draft a `QUIZFRAGE` card following `QUIZFRAGE Card Selection and Wording`. Draft each English translation as its own card, e.g. `a` → `b` and `a` → `c`, and apply these rules to each:
    - Synthesize the best translation from all translation sources, trusting them in this order without discarding a lower source just because a higher one has an answer:
      1. Translator: run `uv run --env-file .env python -m scripts.suggest_anki_cards_cli lookup <German words>` once with every entry's German words and weigh its candidates by confidence and back-translations; stop and show the error if it fails.
      2. Online searches, all issued in parallel in one turn.
      3. Your own validated memory.
-     4. The user's notes, always only suggestions.
+     4. The user's notes and any card text in the input, always only suggestions.
    - Use the shortest common equivalent that translates back to this German word, not to a near-synonym, in US spelling, e.g. `to organize`, not `to organise`. If the meaning depends on context, add one card per common sense, as few as cover them.
    - Start verbs with `to`, and mark `[adj]` or `[adv]` on both the German word and the translation, e.g. `witzig [adj]` → `witty [adj]`. Mark `[pl]` on a term that is grammatically plural and `[sg]` on a term that looks plural but is singular, judging the German word and the translation each on its own, e.g. `die Möbel [pl]` → `furniture` and `die Nachricht` → `news [sg]`. For a person noun that has both a male and a female form, mark `[m.]` or `[f.]` on the translation, and also on the German word when its form is the same for both genders, e.g. `Prominente [f.]` → `celebrity [f.]` but `Richterin` → `judge [f.]`. The translation's `sth.`/`sb.` must match the German word's `etw.`/`jmdn.`/`jmdm.`/`jmds.`, e.g. `etw. ab*geben` → `to submit sth.`; leave out senses that don't.
    - Put a German suffix tag at the end of the German term and an English suffix tag at the end of the English term, as `list` assigns them, e.g. `gekommen [part.II]` → `come [pp]`.
