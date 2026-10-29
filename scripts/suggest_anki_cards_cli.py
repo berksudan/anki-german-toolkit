@@ -1,19 +1,17 @@
 import argparse
 import collections.abc
 import enum
-import re
-import string
 import typing
 
 import pydantic
 
 from scripts.azure_translator import fetch_dictionary_translations
+from scripts.card_draft import DRAFT_CARD_CHECKS_DESCRIPTION, DraftCard
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
     NO_PLURAL,
     TRANSLATION_SEPARATOR,
     AnkiCard,
-    CardCategory,
     SuffixTag,
     SuffixTagLanguage,
 )
@@ -25,13 +23,6 @@ class _Command(enum.Enum):
     LOOKUP = "lookup"
 
 
-class _DraftCard(pydantic.BaseModel):
-    model_config = pydantic.ConfigDict(frozen=True, extra="forbid")
-    category: CardCategory
-    front: str
-    back: str
-
-
 def _print_suggestible_categories() -> None:
     print(f"Translation separator: {TRANSLATION_SEPARATOR!r}")
     print(f"{{OPTIONAL_PLURAL}} for a noun without a plural: {NO_PLURAL!r}")
@@ -41,38 +32,12 @@ def _print_suggestible_categories() -> None:
         )
         print(f"Suffix tags after the {language.value} term: {tags}")
     for category, card_format in CATEGORY_TO_FORMAT.items():
-        if category is not CardCategory.ENG_TO_DEU:
-            print(f"{category}\t{card_format.template}\te.g. {card_format.example}")
-
-
-def _validate_back_separators(*, draft: _DraftCard) -> None:
-    _, back_template = CATEGORY_TO_FORMAT[draft.category].template.split(";")
-    separators = [
-        literal
-        for literal, _field, _spec, _conversion in string.Formatter().parse(
-            back_template
-        )
-        if literal.strip()
-    ]
-    for separator in separators:
-        if draft.back.count(separator) != back_template.count(separator):
-            raise ValueError("separator count mismatch", separator, draft.back)
-
-
-def _validate_suffix_tags(*, draft: _DraftCard) -> None:
-    allowed_tags = [tag.value.text for tag in SuffixTag]
-    for side in (draft.front, draft.back):
-        # e.g. "witty [adj] [frml]" -> ["[adj]", "[frml]"]
-        for tag in re.findall(r"\[[^\]]*\]", side):
-            if tag not in allowed_tags:
-                raise ValueError("unknown suffix tag", tag, allowed_tags)
+        print(f"{category}\t{card_format.template}\te.g. {card_format.example}")
 
 
 def _print_validated_rows(*, drafts_json: str) -> None:
-    drafts = pydantic.TypeAdapter(list[_DraftCard]).validate_json(drafts_json)
+    drafts = pydantic.TypeAdapter(list[DraftCard]).validate_json(drafts_json)
     for draft in drafts:
-        _validate_back_separators(draft=draft)
-        _validate_suffix_tags(draft=draft)
         card = AnkiCard(front=f"{draft.category}: {draft.front}", back=draft.back)
         print(f"{card.category}\t{card.front_without_category}\t{card.back}")
 
@@ -105,8 +70,8 @@ def _dispatch_command_from_cli() -> None:
             "follow and the suggestible "
             "categories with their `front;back` format and an example card. "
             '`build JSON`: take a JSON list of {"category", "front", "back"}, '
-            "shaped like each category's example, validate each card, rejecting "
-            "any `[…]` tag that `list` does not print, and print it "
+            "shaped like each category's example, validate each card against "
+            f"{DRAFT_CARD_CHECKS_DESCRIPTION}, and print it "
             "as a tab-separated spreadsheet row. "
             "`lookup WORD...`: print a Markdown table of Azure dictionary "
             "translations per German word with part of speech, confidence and "

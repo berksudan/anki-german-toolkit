@@ -40,8 +40,9 @@ class CardCategory(enum.StrEnum):
 
 
 class SuffixTagLanguage(enum.Enum):
-    ENGLISH = "English"
+    BOTH = "German and every English"
     EITHER = "German or English"
+    ENGLISH = "English"
     GERMAN = "German"
 
 
@@ -53,8 +54,8 @@ class SuffixTagSpec:
 
 @enum.unique
 class SuffixTag(enum.Enum):
-    ADJECTIVE = SuffixTagSpec(text="[adj]", language=SuffixTagLanguage.EITHER)
-    ADVERB = SuffixTagSpec(text="[adv]", language=SuffixTagLanguage.EITHER)
+    ADJECTIVE = SuffixTagSpec(text="[adj]", language=SuffixTagLanguage.BOTH)
+    ADVERB = SuffixTagSpec(text="[adv]", language=SuffixTagLanguage.BOTH)
     CONJUNCTION = SuffixTagSpec(text="[conj]", language=SuffixTagLanguage.EITHER)
     FEMININE = SuffixTagSpec(text="[f.]", language=SuffixTagLanguage.EITHER)
     FORMAL = SuffixTagSpec(text="[frml]", language=SuffixTagLanguage.EITHER)
