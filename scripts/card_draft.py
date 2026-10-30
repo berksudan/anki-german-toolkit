@@ -8,6 +8,7 @@ import pydantic
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
     TRANSLATION_SEPARATOR,
+    BackAlternatives,
     CardCategory,
     SuffixTag,
     SuffixTagLanguage,
@@ -50,27 +51,49 @@ class DraftCard(pydantic.BaseModel):
     def validate_card_rules(self) -> typing.Self:
         _validate_suffix_tags(text=self.front)
         _validate_suffix_tags(text=self.back)
-        _, back_template = CATEGORY_TO_FORMAT[self.category].template.split(";")
-        back_field_to_value = _parse_template_side(
-            template_side=back_template, text=self.back
-        )
-        english_translations = back_field_to_value.get(_ENGLISH_TRANSLATIONS_FIELD)
-        if english_translations is not None:
-            german_term = _strip_usage_examples(text=self.front)
-            translation_terms = [
-                _strip_usage_examples(text=translation)
-                for translation in english_translations.split(TRANSLATION_SEPARATOR)
-            ]
-            _validate_suffix_tag_placement(
-                german_term=german_term, translations=translation_terms
+        card_format = CATEGORY_TO_FORMAT[self.category]
+        _, back_template = card_format.template.split(";")
+        for back_alternative in _split_back_alternatives(
+            back_alternatives=card_format.back_alternatives, back=self.back
+        ):
+            back_field_to_value = _parse_template_side(
+                template_side=back_template, text=back_alternative
             )
-            _validate_object_placeholders(
-                german_term=german_term, translations=translation_terms
-            )
-            _validate_separable_verb_translations(
-                german_term=german_term, translations=translation_terms
-            )
+            english_translations = back_field_to_value.get(_ENGLISH_TRANSLATIONS_FIELD)
+            if english_translations is not None:
+                _validate_english_translations(
+                    front=self.front, english_translations=english_translations
+                )
         return self
+
+
+def _split_back_alternatives(
+    *, back_alternatives: BackAlternatives, back: str
+) -> list[str]:
+    match back_alternatives:
+        case BackAlternatives.NOT_ALLOWED:
+            return [back]
+        case BackAlternatives.JOINED_BY_TRANSLATION_SEPARATOR:
+            return back.split(TRANSLATION_SEPARATOR)
+        case unreachable:
+            typing.assert_never(unreachable)
+
+
+def _validate_english_translations(*, front: str, english_translations: str) -> None:
+    german_term = _strip_usage_examples(text=front)
+    translation_terms = [
+        _strip_usage_examples(text=translation)
+        for translation in english_translations.split(TRANSLATION_SEPARATOR)
+    ]
+    _validate_suffix_tag_placement(
+        german_term=german_term, translations=translation_terms
+    )
+    _validate_object_placeholders(
+        german_term=german_term, translations=translation_terms
+    )
+    _validate_separable_verb_translations(
+        german_term=german_term, translations=translation_terms
+    )
 
 
 def _strip_usage_examples(*, text: str) -> str:

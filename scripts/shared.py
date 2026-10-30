@@ -72,10 +72,16 @@ NO_PLURAL = "NO PLURAL"
 TRANSLATION_SEPARATOR = " | "
 
 
+class BackAlternatives(enum.Enum):
+    NOT_ALLOWED = enum.auto()
+    JOINED_BY_TRANSLATION_SEPARATOR = enum.auto()
+
+
 @dataclasses.dataclass(frozen=True, kw_only=True, slots=True)
 class CardFormat:
     template: str
     example: str
+    back_alternatives: BackAlternatives = BackAlternatives.NOT_ALLOWED
 
 
 CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
@@ -127,7 +133,8 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     ),
     CardCategory.PRAEPOSITIONALERGAENZUNG_AKK_DATIV: CardFormat(
         template="{VERB_PRESENT};{VERB_PRESENT} + {PREPOSITION} + {AKK_DAT}",
-        example="sich interessieren;sich interessieren + FÜR + AKKUSATIV",
+        example="berichten;berichten + ÜBER + AKKUSATIV | berichten + VON + DATIV",
+        back_alternatives=BackAlternatives.JOINED_BY_TRANSLATION_SEPARATOR,
     ),
     CardCategory.DAS_GEGENTEIL_VON: CardFormat(
         template="{STR_GERMAN_1};{STR_GERMAN_2}", example="schwierig;einfach | leicht"
