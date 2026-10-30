@@ -140,7 +140,7 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
         template="{STR_GERMAN_1};{STR_GERMAN_2}", example="schwierig;einfach | leicht"
     ),
     CardCategory.PRAEPOSITION_REKTION: CardFormat(
-        template="{STR_GERMAN};{AKK_DAT_SECTION}", example="bis;AKKUSATIV"
+        template="{STR_GERMAN};{CASE_SECTION}", example="bis;AKKUSATIV"
     ),
     CardCategory.QUIZFRAGE: CardFormat(
         template="{STR_ANY_1};{STR_ANY_2}",

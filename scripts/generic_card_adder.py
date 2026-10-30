@@ -68,7 +68,9 @@ class _GrammaticalCaseSection(enum.StrEnum):
 
     AKKUSATIV = "AKKUSATIV"
     DATIV = "DATIV"
+    GENITIV = "GENITIV"
     BOTH = "AKKUSATIV | DATIV"
+    GENITIV_DATIV = "GENITIV | DATIV"
 
 
 @dataclasses.dataclass(frozen=True, kw_only=True, slots=True)
@@ -210,7 +212,7 @@ def _resolve_token(token: str) -> str | None:
         case "AKK_DAT":
             return _enter_from_options(_GrammaticalCase)
 
-        case "AKK_DAT_SECTION":
+        case "CASE_SECTION":
             return _enter_from_options(_GrammaticalCaseSection)
 
         case "PREPOSITION":
