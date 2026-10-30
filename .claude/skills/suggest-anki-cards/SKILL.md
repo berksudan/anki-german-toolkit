@@ -3,9 +3,10 @@ name: suggest-anki-cards
 description: Suggest Anki card categories for German words, sentences or given cards to check, and print the chosen cards as rows to paste into a spreadsheet (Proton Sheets, Google Sheets, Excel, etc.).
 argument-hint: <German words, sentences or cards to check>
 allowed-tools:
-  - Bash(.venv/bin/python -m scripts.suggest_anki_cards_cli *)
-  - Bash(.venv/bin/duden *)
-  - Bash(uv run --env-file .env python -m scripts.suggest_anki_cards_cli lookup *)
+  - Bash(just cards-build *)
+  - Bash(just cards-list)
+  - Bash(just cards-lookup *)
+  - Bash(just duden *)
 ---
 
 # Suggest Anki Cards
@@ -21,13 +22,13 @@ Category abbreviations the input may use:
 
 `list` output with the categories and their formats and example cards, the translation separator, the no-plural value and the allowed suffix tags by the language of the term each follows:
 
-!`.venv/bin/python -m scripts.suggest_anki_cards_cli list`
+!`just cards-list`
 
 1. Work from the `list` output above for categories, formats, separators and suffix tags; never work from memory.
 2. For each input entry, use the categories the input names; otherwise ask with one multi-select `AskUserQuestion` question per entry, quoting that entry's whole input line verbatim in the question and keeping its header from reading as part of another entry, offering up to 4 categories whose example shows the entry fits, with `QUIZFRAGE` only as a last resort per `QUIZFRAGE Card Selection and Wording`.
 3. Draft one card per selected category, shaped like its example, in plain text without HTML tags such as `<br>` unless the example has them, and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. Draft a `QUIZFRAGE` card following `QUIZFRAGE Card Selection and Wording`. Draft each English translation as its own card, e.g. `a` → `b` and `a` → `c`, and apply these rules to each:
    - Synthesize the best translation from all translation sources, trusting them in this order without discarding a lower source just because a higher one has an answer:
-     1. Translator: run `uv run --env-file .env python -m scripts.suggest_anki_cards_cli lookup <German words>` once with every entry's German words and weigh its candidates by confidence and back-translations; stop and show the error if it fails.
+     1. Translator: run `just cards-lookup <German words>` once with every entry's German words and weigh its candidates by confidence and back-translations; stop and show the error if it fails.
      2. Online searches, all issued in parallel in one turn.
      3. Your own validated memory.
      4. The user's notes and any card text in the input, always only suggestions.
@@ -37,8 +38,8 @@ Category abbreviations the input may use:
    - If a translation, whichever source it came from, could still be read as another German word or sense than the card means, add the fewest of the suffix tags `list` prints (such as `[noun]`, never a made-up `[…]` tag) and/or `(e.g. …)` usage examples until it can't, without repeating the translation; use an `(i.e. …)` gloss instead of examples when no short example shows the sense.
 4. Verify the cards:
    - Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off.
-   - Check each German word's article, plural, forms and senses against `.venv/bin/duden <word>`, passing the bare word without article or `*`.
-   - Leave the format checks that `build --help` lists to `build` in step 8 rather than rechecking them here.
+   - Check each German word's article, plural, forms and senses against `just duden <word>`, passing the bare word without article or `*`.
+   - Leave the format checks that `just cards-build --help` lists to `just cards-build` in step 8 rather than rechecking them here.
 5. Merge each entry's translation cards of one category with the translation separator into `a` → `b | c`.
 6. Trim each merged card to the fewest translations that cover the German word's common senses:
    - Keep one translation per sense, at most two in total; keep more only when each extra one names a sense no other kept translation covers.
@@ -46,7 +47,7 @@ Category abbreviations the input may use:
    - Replace a translation rarely used in everyday English with an everyday word for the same sense, keeping the rare one only when no everyday word exists.
    - On the trimmed card, keep an `[adj]` or `[adv]` tag on the German term only when every remaining translation carries it; otherwise drop that tag from the German term and every translation, and tell the senses apart with `(e.g. …)` usage examples or `(i.e. …)` glosses instead.
 7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
-8. Pass the trimmed cards as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
+8. Pass the trimmed cards as one JSON argument to `just cards-build` (see `just cards-build --help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
 9. Revise from the relevant step on the user's feedback until they approve the output; only then copy the approved `build` output to the clipboard, keeping the tabs and without a trailing newline.
 
 ## QUIZFRAGE Card Selection and Wording
