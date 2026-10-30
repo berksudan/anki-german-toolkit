@@ -43,6 +43,7 @@ Category abbreviations the input may use:
 6. Trim each merged card to the fewest translations that cover the German word's common senses:
    - Keep one translation per sense, at most two in total; keep more only when each extra one names a sense no other kept translation covers.
    - Within one sense, keep the everyday word over a formal or technical one, then the translation the highest-ranked source of step 3 confirms, then the one the most sources confirm.
+   - Replace a translation rarely used in everyday English with an everyday word for the same sense, keeping the rare one only when no everyday word exists.
    - On the trimmed card, keep an `[adj]` or `[adv]` tag on the German term only when every remaining translation carries it; otherwise drop that tag from the German term and every translation, and tell the senses apart with `(e.g. …)` usage examples or `(i.e. …)` glosses instead.
 7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
 8. Pass the trimmed cards as one JSON argument to `.venv/bin/python -m scripts.suggest_anki_cards_cli build` (see `--help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
