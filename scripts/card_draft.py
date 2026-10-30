@@ -25,7 +25,7 @@ DRAFT_CARD_CHECKS_DESCRIPTION = (
     "its category's `front;back` format, the `[…]` suffix tags `list` prints "
     "with the terms they follow, and, for each "
     f"`{{{_ENGLISH_TRANSLATIONS_FIELD}}}` translation, ignoring `(e.g. …)` "
-    "usage examples, matching "
+    "usage examples and `(i.e. …)` glosses, matching "
     + "/".join(
         f"`{german_placeholder}`"
         for german_placeholders in _GERMAN_PLACEHOLDERS_BY_ENGLISH_PLACEHOLDER.values()
@@ -80,9 +80,9 @@ def _split_back_alternatives(
 
 
 def _validate_english_translations(*, front: str, english_translations: str) -> None:
-    german_term = _strip_usage_examples(text=front)
+    german_term = _strip_usage_examples_and_glosses(text=front)
     translation_terms = [
-        _strip_usage_examples(text=translation)
+        _strip_usage_examples_and_glosses(text=translation)
         for translation in english_translations.split(TRANSLATION_SEPARATOR)
     ]
     _validate_suffix_tag_placement(
@@ -96,9 +96,9 @@ def _validate_english_translations(*, front: str, english_translations: str) -> 
     )
 
 
-def _strip_usage_examples(*, text: str) -> str:
-    """Remove `(e.g. …)` usage examples, e.g. "sticky (e.g. weather) [adj]" -> "sticky [adj]"."""
-    return re.sub(r" \(e\.g\. [^)]*\)", "", text)
+def _strip_usage_examples_and_glosses(*, text: str) -> str:
+    """Remove `(e.g. …)` usage examples and `(i.e. …)` glosses, e.g. "sticky (e.g. weather) [adj]" -> "sticky [adj]"."""
+    return re.sub(r" \((?:e\.g\.|i\.e\.) [^)]*\)", "", text)
 
 
 def _parse_template_side(*, template_side: str, text: str) -> dict[str, str]:
