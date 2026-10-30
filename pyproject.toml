@@ -3,6 +3,7 @@ requires-python = ">=3.14"
 name = "anki-german-toolkit"
 version = "0.1.0"
 dependencies = [
+    "duden==0.19.2",
     "pydantic==2.12.5",
 ]
 
