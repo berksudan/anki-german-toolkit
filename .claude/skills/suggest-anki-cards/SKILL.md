@@ -42,11 +42,13 @@ Category abbreviations the input may use:
 ## QUIZFRAGE Card Selection and Wording
 
 - Suggest `QUIZFRAGE` only for a semi-structured or unstructured fact that no other category can test, since its free-form cards lack the fixed format that keeps the other categories consistent.
+- Make a `QUIZFRAGE` card test the fact the input names, and ask the user for that fact when the input leaves it unclear, instead of guessing one or falling back to a translation or a grammar term the input doesn't mention.
 - Treat these `QUIZFRAGE` wording rules as defaults, not a checklist: judge each card by how well it teaches, and break a rule when following it makes the card worse, saying which rule and why.
 - Test one fact per `QUIZFRAGE` card, splitting a combined question into several cards.
 - Word a `QUIZFRAGE` front so it has exactly one definite answer, never as an open-ended comparison or explanation.
 - Write a `QUIZFRAGE` card in German, joining the options on its front with ` ODER ` only when picking among them takes real knowledge; ask for free recall instead when the choice is a near 50/50 guess or the front already gives the answer away.
-- Word every `QUIZFRAGE` front to be understood at a glance, even when another rule pulls the other way: lead with what is asked and put any context after it, e.g. `Akkusativergänzung in „Sie informierte den Kunden“?` rather than `„Sie informierte den Kunden“ — Akkusativergänzung = ?`.
+- Word every `QUIZFRAGE` front as a short question understood at a glance, even when another rule pulls the other way: lead with what is asked, put any context after it, and quote only the example word, phrase or sentence the question asks about in „…“, never the question's own words, e.g. `Akkusativergänzung in „Sie informierte den Kunden“?` rather than `„Sie informierte den Kunden“ — Akkusativergänzung = ?`.
+- Ask about a sentence on a `QUIZFRAGE` front by quoting it whole with a gap or with the word to place, not by listing loose words to assemble under extra conditions.
 - Keep `:` off a `QUIZFRAGE` front, since `AnkiCard` rejects any `:` after the category prefix, and keep off it any symbol that adds no meaning or already means something else in the deck.
 - Give a `QUIZFRAGE` front only enough context to rule out other correct answers, without hinting at the answer.
 - Put the bare answer on a `QUIZFRAGE` back, adding one short example in parentheses only when it shows something the answer alone doesn't.
