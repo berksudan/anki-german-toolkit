@@ -17,8 +17,8 @@ setup:
     "{{ VENV_DIR }}/bin/prek" install
     echo "Activate the virtual environment: source {{ VENV_DIR }}/bin/activate"
 
-duden word:
-    @uv run duden "$1"
+duden word *options:
+    @uv run duden "$@"
 
 cards-list:
     @uv run python -m scripts.suggest_anki_cards_cli list

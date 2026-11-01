@@ -38,7 +38,7 @@ Category abbreviations the input may use:
    - If a translation, whichever source it came from, could still be read as another German word or sense than the card means, add the fewest of the suffix tags `list` prints (such as `[noun]`, never a made-up `[…]` tag) and/or `(e.g. …)` usage examples until it can't, without repeating the translation; use an `(i.e. …)` gloss instead of examples when no short example shows the sense.
 4. Verify the cards:
    - Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off.
-   - Check each German word's article, plural, forms and senses against `just duden <word>`, passing the bare word without article or `*`.
+   - Check each German word's article, plural, forms and senses against `just duden <word>`, passing the bare word without article or `*`; when it lists several matching words, rerun with `-r <n>` for each one the card could mean, e.g. `just duden Regen -r 1`.
    - Leave the format checks that `just cards-build --help` lists to `just cards-build` in step 8 rather than rechecking them here.
 5. Merge each entry's translation cards of one category with the translation separator into `a` → `b | c`.
 6. Trim each merged card to the fewest translations that cover the German word's common senses:
@@ -60,6 +60,7 @@ Category abbreviations the input may use:
 - Write a `QUIZFRAGE` card in German, joining the options on its front with ` ODER ` only when picking among them takes real knowledge; ask for free recall instead when the choice is a near 50/50 guess or the front already gives the answer away.
 - Word every `QUIZFRAGE` front as a short question understood at a glance, even when another rule pulls the other way: lead with what is asked, put any context after it, and quote only the example word, phrase or sentence the question asks about in „…“, never the question's own words, e.g. `Akkusativergänzung in „Sie informierte den Kunden“?` rather than `„Sie informierte den Kunden“ — Akkusativergänzung = ?`.
 - Ask about a sentence on a `QUIZFRAGE` front by quoting it whole with a gap or with the word to place, not by listing loose words to assemble under extra conditions.
+- Write the word or part a `QUIZFRAGE` card tests in upper case on its front and back, e.g. `NICHT einfügen in „Wir sind wegen des Regens gekommen“ (Satznegation)?` → `Wir sind wegen des Regens NICHT gekommen.`, keeping context labels and any noun whose spelling the card tests in normal case.
 - Keep `:` off a `QUIZFRAGE` front, since `AnkiCard` rejects any `:` after the category prefix, and keep off it any symbol that adds no meaning or already means something else in the deck.
 - Give a `QUIZFRAGE` front only enough context to rule out other correct answers, without hinting at the answer.
 - Put the bare answer on a `QUIZFRAGE` back, adding one short example in parentheses only when it shows something the answer alone doesn't.
