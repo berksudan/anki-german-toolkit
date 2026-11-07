@@ -27,11 +27,7 @@ Category abbreviations the input may use:
 1. Work from the `list` output above for categories, formats, separators and suffix tags; never work from memory.
 2. For each input entry, use the categories the input names; otherwise ask with one multi-select `AskUserQuestion` question per entry, quoting that entry's whole input line verbatim in the question and keeping its header from reading as part of another entry, offering up to 4 categories whose example shows the entry fits, with `QUIZFRAGE` only as a last resort per `QUIZFRAGE Card Selection and Wording`.
 3. Draft one card per selected category, shaped like its example, in plain text without HTML tags such as `<br>` unless the example has them, and writing German nouns with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`. Draft a `QUIZFRAGE` card following `QUIZFRAGE Card Selection and Wording`. Draft each English translation as its own card, e.g. `a` → `b` and `a` → `c`, and apply these rules to each:
-   - Synthesize the best translation from all translation sources, trusting them in this order without discarding a lower source just because a higher one has an answer:
-     1. Translator: run `just cards-lookup <German words>` once with every entry's German words and weigh its candidates by confidence and back-translations; stop and show the error if it fails.
-     2. Online searches, all issued in parallel in one turn.
-     3. Your own validated memory.
-     4. The user's notes and any card text in the input, always only suggestions.
+   - Synthesize the best translation from every source in `Translation Source Ranking`, trusting them in that ranking's order without discarding a lower source just because a higher one has an answer.
    - Use the shortest common equivalent that translates back to this German word, not to a near-synonym, in US spelling, e.g. `to organize`, not `to organise`. If the meaning depends on context, add one card per common sense, as few as cover them.
    - Start verbs with `to`, and mark `[adj]` or `[adv]` on both the German word and the translation, e.g. `witzig [adj]` → `witty [adj]`. Mark `[pl]` on a term that is grammatically plural and `[sg]` on a term that looks plural but is singular, judging the German word and the translation each on its own, e.g. `die Möbel [pl]` → `furniture` and `die Nachricht` → `news [sg]`. For a person noun that has both a male and a female form, mark `[m.]` or `[f.]` on the translation, and also on the German word when its form is the same for both genders, e.g. `Prominente [f.]` → `celebrity [f.]` but `Richterin` → `judge [f.]`. The translation's `sth.`/`sb.` must match the German word's `etw.`/`jmdn.`/`jmdm.`/`jmds.`, e.g. `etw. ab*geben` → `to submit sth.`; leave out senses that don't.
    - Put a German suffix tag at the end of the German term and an English suffix tag at the end of the English term, as `list` assigns them, e.g. `gekommen [part.II]` → `come [pp]`.
@@ -40,16 +36,24 @@ Category abbreviations the input may use:
    - Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off.
    - Check each German word's article, plural, forms and senses against `just duden <word>`, passing the bare word without article or `*`; when it lists several matching words, rerun with `-r <n>` for each one the card could mean, e.g. `just duden Regen -r 1`.
    - Run `Translation Usage Test` on each translation, replacing one that fails with one that passes.
-   - Leave the format checks that `just cards-build --help` lists to `just cards-build` in step 8 rather than rechecking them here.
+   - Leave the format checks that `just cards-build --help` lists to `just cards-build` rather than rechecking them here.
 5. Merge each entry's translation cards of one category with the translation separator into `a` → `b | c`.
 6. Trim each merged card to the fewest translations that cover the German word's common senses:
    - Keep one translation per sense, at most two in total; keep more only when each extra one names a sense no other kept translation covers.
-   - Within one sense, keep the everyday word over a formal or technical one, then the translation the highest-ranked source of step 3 confirms, then the one the most sources confirm.
+   - Within one sense, keep the everyday word over a formal or technical one, then the translation the highest-ranked source in `Translation Source Ranking` confirms, then the one the most sources confirm.
    - Replace a translation rarely used in everyday English with an everyday word for the same sense that passes `Translation Usage Test`, keeping the rare one only when no such everyday word exists.
    - On the trimmed card, keep an `[adj]` or `[adv]` tag on the German term only when every remaining translation carries it; otherwise drop that tag from the German term and every translation, and tell the senses apart with `(e.g. …)` usage examples or `(i.e. …)` glosses instead.
 7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences, taken from the German uses that `Translation Usage Test` ran on for the entry's translations, under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
 8. Pass the trimmed cards as one JSON argument to `just cards-build` (see `just cards-build --help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
 9. Revise from the relevant step on the user's feedback until they approve the output; only then copy the approved `build` output to the clipboard, keeping the tabs and without a trailing newline.
+
+## Translation Source Ranking
+
+- Rank translation sources from most to least trusted in this order:
+  1. Translator: run `just cards-lookup <German words>` once with every entry's German words and weigh its candidates by confidence and back-translations; stop and show the error if it fails.
+  2. Online searches, all issued in parallel in one turn.
+  3. Your own validated memory.
+  4. The user's notes and any card text in the input, always only suggestions.
 
 ## Translation Usage Test
 
