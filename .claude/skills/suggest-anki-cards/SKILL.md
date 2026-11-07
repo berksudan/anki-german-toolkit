@@ -39,6 +39,7 @@ Category abbreviations the input may use:
 4. Verify the cards:
    - Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off.
    - Check each German word's article, plural, forms and senses against `just duden <word>`, passing the bare word without article or `*`; when it lists several matching words, rerun with `-r <n>` for each one the card could mean, e.g. `just duden Regen -r 1`.
+   - Test each translation by putting it in place of the German word in 2–3 of that sense's most common German uses, taken from the `Typical compounds` that `just duden` lists and from online sources, never chosen to suit the translation; replace a translation that doesn't read naturally in every one of them with one that does or, when none does, with the one that fits the most of them.
    - Leave the format checks that `just cards-build --help` lists to `just cards-build` in step 8 rather than rechecking them here.
 5. Merge each entry's translation cards of one category with the translation separator into `a` → `b | c`.
 6. Trim each merged card to the fewest translations that cover the German word's common senses:
@@ -46,7 +47,7 @@ Category abbreviations the input may use:
    - Within one sense, keep the everyday word over a formal or technical one, then the translation the highest-ranked source of step 3 confirms, then the one the most sources confirm.
    - Replace a translation rarely used in everyday English with an everyday word for the same sense, keeping the rare one only when no everyday word exists.
    - On the trimmed card, keep an `[adj]` or `[adv]` tag on the German term only when every remaining translation carries it; otherwise drop that tag from the German term and every translation, and tell the senses apart with `(e.g. …)` usage examples or `(i.e. …)` glosses instead.
-7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
+7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences, taken from the German word's most common uses rather than chosen to suit the translation, under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
 8. Pass the trimmed cards as one JSON argument to `just cards-build` (see `just cards-build --help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
 9. Revise from the relevant step on the user's feedback until they approve the output; only then copy the approved `build` output to the clipboard, keeping the tabs and without a trailing newline.
 
