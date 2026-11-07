@@ -29,6 +29,7 @@ class CardCategory(enum.StrEnum):
     KOMPARATIV_SUPERLATIV = "KOMPARATIV ⋀ SUPERLATIV"
     KONJUGATION_ICH_DU_ES = "KONJUGATION (ICH/DU/ES)"
     KONJUGATION_WIR_IHR_SIE = "KONJUGATION (WIR/IHR/SIE)"
+    KONJUNKTIV_II_ICH_ES = "KONJUNKTIV II (ICH/ES)"
     LOKALE_PRAEPOSITION_BEDEUTUNG = "LOKALE PRÄPOSITION BEDEUTUNG"
     PRAEPOSITIONALERGAENZUNG_AKK_DATIV = "PRÄPOSITIONALERGÄNZUNG (AKKUSATIV/DATIV)"
     PRAEPOSITION_REKTION = "PRÄPOSITION REKTION"
@@ -130,6 +131,9 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     CardCategory.KONJUGATION_WIR_IHR_SIE: CardFormat(
         template="{VERB_PRESENT};{WIR_IHR_SIE}",
         example="mitnehmen;wir nehmen mit<br>ihr nehmt mit<br>Sie/sie nehmen mit",
+    ),
+    CardCategory.KONJUNKTIV_II_ICH_ES: CardFormat(
+        template="{VERB_PRESENT};{STR_GERMAN}", example="wissen;wüsste"
     ),
     CardCategory.PRAEPOSITIONALERGAENZUNG_AKK_DATIV: CardFormat(
         template="{VERB_PRESENT};{VERB_PRESENT} + {PREPOSITION} + {AKK_DAT}",

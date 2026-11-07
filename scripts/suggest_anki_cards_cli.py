@@ -21,6 +21,7 @@ class _Command(enum.Enum):
     LIST = "list"
     BUILD = "build"
     LOOKUP = "lookup"
+    PREVIEW = "preview"
 
 
 def _print_suggestible_categories() -> None:
@@ -35,11 +36,32 @@ def _print_suggestible_categories() -> None:
         print(f"{category}\t{card_format.template}\te.g. {card_format.example}")
 
 
-def _print_validated_rows(*, drafts_json: str) -> None:
+def _validate_cards(*, drafts_json: str) -> list[AnkiCard]:
     drafts = pydantic.TypeAdapter(list[DraftCard]).validate_json(drafts_json)
-    for draft in drafts:
-        card = AnkiCard(front=f"{draft.category}: {draft.front}", back=draft.back)
+    return [
+        AnkiCard(front=f"{draft.category}: {draft.front}", back=draft.back)
+        for draft in drafts
+    ]
+
+
+def _escape_markdown_cell(text: str) -> str:
+    return text.replace("|", r"\|")
+
+
+def _print_validated_rows(*, drafts_json: str) -> None:
+    for card in _validate_cards(drafts_json=drafts_json):
         print(f"{card.category}\t{card.front_without_category}\t{card.back}")
+
+
+def _print_validated_table(*, drafts_json: str) -> None:
+    print("| Category | Front | Back |")
+    print("| --- | --- | --- |")
+    for card in _validate_cards(drafts_json=drafts_json):
+        print(
+            f"| {card.category}"
+            f" | {_escape_markdown_cell(card.front_without_category)}"
+            f" | {_escape_markdown_cell(card.back)} |"
+        )
 
 
 def _print_translation_suggestions(
@@ -73,6 +95,8 @@ def _dispatch_command_from_cli() -> None:
             "shaped like each category's example, validate each card against "
             f"{DRAFT_CARD_CHECKS_DESCRIPTION}, and print it "
             "as a tab-separated spreadsheet row. "
+            "`preview JSON`: validate the same input as `build` and print the "
+            "cards as a Markdown table with Category, Front and Back columns. "
             "`lookup WORD...`: print a Markdown table of Azure dictionary "
             "translations per German word with part of speech, confidence and "
             "back-translations with their frequency counts (needs the "
@@ -90,6 +114,9 @@ def _dispatch_command_from_cli() -> None:
             _print_validated_rows(drafts_json=drafts_json)
         case _Command.LOOKUP:
             _print_translation_suggestions(german_words=arguments.inputs)
+        case _Command.PREVIEW:
+            (drafts_json,) = arguments.inputs
+            _print_validated_table(drafts_json=drafts_json)
         case unreachable:
             typing.assert_never(unreachable)
 

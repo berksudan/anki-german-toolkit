@@ -28,3 +28,6 @@ cards-lookup *words:
 
 cards-build json:
     @uv run python -m scripts.suggest_anki_cards_cli build "$1"
+
+cards-preview json:
+    @uv run python -m scripts.suggest_anki_cards_cli preview "$1"

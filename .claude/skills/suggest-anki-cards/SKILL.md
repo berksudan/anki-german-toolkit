@@ -6,6 +6,7 @@ allowed-tools:
   - Bash(just cards-build *)
   - Bash(just cards-list)
   - Bash(just cards-lookup *)
+  - Bash(just cards-preview *)
   - Bash(just duden *)
 ---
 
@@ -49,7 +50,7 @@ Category abbreviations the input may use:
 9. Ask for approval with single-select `AskUserQuestion` questions:
    - Ask each yes/no choice left for the user, such as whether to add a card for another common use of an entry, as its own question with the options `Yes` and `No`, in the same call as the approval question and before it.
    - When the yes/no choices don't all fit beside the approval question within `AskUserQuestion`'s limit of 4 questions per call, ask all of them first in earlier calls of up to 4 questions each, revise from the relevant step on each `Yes`, and then ask the approval question alone.
-   - Ask whether the user approves the cards as the last question, with the options `Approve` and `Chat about this` and the `build` output unchanged as the preview of both options.
+   - Ask whether the user approves the cards as the last question, with the options `Approve` and `Chat about this` and, as the preview of both options, the output of `just cards-preview` run on the same JSON as `build`, unchanged.
    - Copy the `build` output to the clipboard, keeping the tabs and without a trailing newline, only when the user picks `Approve` and no other answer asks for a change.
    - When any answer asks for a change, copy nothing: after `Chat about this`, wait for the user's feedback in the chat, and take a typed `Other` answer as feedback; then revise from the relevant step and ask again.
 
