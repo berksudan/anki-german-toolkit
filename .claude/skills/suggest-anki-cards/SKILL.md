@@ -39,17 +39,22 @@ Category abbreviations the input may use:
 4. Verify the cards:
    - Verify that every card is factually correct, fixing and rechecking until a full pass finds nothing off.
    - Check each German word's article, plural, forms and senses against `just duden <word>`, passing the bare word without article or `*`; when it lists several matching words, rerun with `-r <n>` for each one the card could mean, e.g. `just duden Regen -r 1`.
-   - Test each translation by putting it in place of the German word in 2–3 of that sense's most common German uses, taken from the `Typical compounds` that `just duden` lists and from online sources, never chosen to suit the translation; replace a translation that doesn't read naturally in every one of them with one that does or, when none does, with the one that fits the most of them.
+   - Run `Translation Usage Test` on each translation, replacing one that fails with one that passes.
    - Leave the format checks that `just cards-build --help` lists to `just cards-build` in step 8 rather than rechecking them here.
 5. Merge each entry's translation cards of one category with the translation separator into `a` → `b | c`.
 6. Trim each merged card to the fewest translations that cover the German word's common senses:
    - Keep one translation per sense, at most two in total; keep more only when each extra one names a sense no other kept translation covers.
    - Within one sense, keep the everyday word over a formal or technical one, then the translation the highest-ranked source of step 3 confirms, then the one the most sources confirm.
-   - Replace a translation rarely used in everyday English with an everyday word for the same sense that also reads naturally in the common German uses step 4 tested, keeping the rare one only when no such everyday word exists.
+   - Replace a translation rarely used in everyday English with an everyday word for the same sense that passes `Translation Usage Test`, keeping the rare one only when no such everyday word exists.
    - On the trimmed card, keep an `[adj]` or `[adv]` tag on the German term only when every remaining translation carries it; otherwise drop that tag from the German term and every translation, and tell the senses apart with `(e.g. …)` usage examples or `(i.e. …)` glosses instead.
-7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences, taken from the German word's most common uses rather than chosen to suit the translation, under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
+7. For each entry with a translation, print its `lookup` output unchanged, then one short sentence per translation justifying it, followed by 1–2 translated example sentences, taken from the German uses that `Translation Usage Test` ran on for the entry's translations, under `**Examples:**` in a `| **DEU** | **ENG** |` table with the entry and its translation in `***…***`.
 8. Pass the trimmed cards as one JSON argument to `just cards-build` (see `just cards-build --help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
 9. Revise from the relevant step on the user's feedback until they approve the output; only then copy the approved `build` output to the clipboard, keeping the tabs and without a trailing newline.
+
+## Translation Usage Test
+
+- Run `Translation Usage Test` on a translation by putting it in place of the German word in 2–3 of that sense's most common German uses, taken from the `Typical compounds` that `just duden` lists and from online sources, never chosen to suit the translation.
+- A translation passes `Translation Usage Test` when it reads naturally in every one of those uses or, when no translation of that sense reads naturally in all of them, when no other translation of that sense reads naturally in more of them.
 
 ## QUIZFRAGE Card Selection and Wording
 
