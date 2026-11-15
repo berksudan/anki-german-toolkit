@@ -81,15 +81,21 @@ class _Person:
 
 _PERSONS_BY_CONJUGATION_TOKEN: dict[str, tuple[_Person, ...]] = {
     "ICH_DU_ES": (
-        _Person(pronoun="ich", reflexive_pronoun="mich"),
-        _Person(pronoun="du", reflexive_pronoun="dich"),
-        _Person(pronoun="er/sie/es", reflexive_pronoun="sich"),
+        _Person(pronoun="ICH", reflexive_pronoun="mich"),
+        _Person(pronoun="DU", reflexive_pronoun="dich"),
+        _Person(pronoun="ER/SIE/ES", reflexive_pronoun="sich"),
     ),
     "WIR_IHR_SIE": (
-        _Person(pronoun="wir", reflexive_pronoun="uns"),
-        _Person(pronoun="ihr", reflexive_pronoun="euch"),
-        _Person(pronoun="Sie/sie", reflexive_pronoun="sich"),
+        _Person(pronoun="WIR", reflexive_pronoun="uns"),
+        _Person(pronoun="IHR", reflexive_pronoun="euch"),
+        _Person(pronoun="SIE (PLURAL)/SIE (HÖFLICH)", reflexive_pronoun="sich"),
     ),
+}
+_VERB_TOKEN_TO_FORM_NAME: dict[str, str] = {
+    "VERB_PERFEKT": "perfekt",
+    "VERB_PRESENT": "present",
+    "VERB_PRESENT_OR_PRÄTERITUM": "present or präteritum",
+    "VERB_PRÄTERITUM": "präteritum",
 }
 
 
@@ -144,7 +150,7 @@ def _prompt_conjugations(*, persons: tuple[_Person, ...]) -> str | None:
         word = conjugation.replace(f" {person.reflexive_pronoun}", "")
         if word.count(" ") > 1 or not word.replace(" ", "").isalpha():
             return None
-    return "<br>".join(
+    return ", ".join(
         f"{person.pronoun} {conjugation}"
         for person, conjugation in zip(persons, conjugations, strict=True)
     )
@@ -193,10 +199,9 @@ def _resolve_token(token: str) -> str | None:
             )
 
         case t if t.startswith("VERB_"):
-            form = t.split("VERB_")[1].lower()
-            assert form in ("present", "perfekt", "präteritum")
             verb = input(
-                f"   > Enter a verb in {form} form (add `sich ` at the beginning if reflexive): "
+                f"   > Enter a verb in {_VERB_TOKEN_TO_FORM_NAME[t]} form "
+                "(add `sich ` at the beginning if reflexive): "
             ).lower()
             cleaned = verb.replace("*", "").replace("sich ", "").replace(" ", "")
             if not cleaned.isalpha():

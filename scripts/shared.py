@@ -130,12 +130,12 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
         example="teuer;teurer, am teuersten",
     ),
     CardCategory.KONJUGATION_ICH_DU_ES: CardFormat(
-        template="{VERB_PRESENT};{ICH_DU_ES}",
-        example="mitnehmen;ich nehme mit<br>du nimmst mit<br>er/sie/es nimmt mit",
+        template="{VERB_PRESENT_OR_PRÄTERITUM};{ICH_DU_ES}",
+        example="mit*nehmen;ICH nehme mit, DU nimmst mit, ER/SIE/ES nimmt mit",
     ),
     CardCategory.KONJUGATION_WIR_IHR_SIE: CardFormat(
-        template="{VERB_PRESENT};{WIR_IHR_SIE}",
-        example="mitnehmen;wir nehmen mit<br>ihr nehmt mit<br>Sie/sie nehmen mit",
+        template="{VERB_PRESENT_OR_PRÄTERITUM};{WIR_IHR_SIE}",
+        example="mit*nehmen;WIR nehmen mit, IHR nehmt mit, SIE (PLURAL)/SIE (HÖFLICH) nehmen mit",
     ),
     CardCategory.KONJUNKTIV_II_ICH_ES: CardFormat(
         template="{VERB_PRESENT};{STR_GERMAN}", example="wissen;wüsste"
