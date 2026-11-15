@@ -34,6 +34,7 @@ Category abbreviations the input may use:
    - Write German nouns on a card with their definite article unless the card tests it, and separable verb infinitives with `*`, e.g. `ab*holen`.
    - On the German term of a translation card (a category starting with `DEU → ENG`), write the case a preposition governs after the preposition and a space as `+ Akk.`, `+ Dat.` or `+ Gen.`, e.g. `sich wehren gegen + Akk.`, even when the input writes it another way, such as `(+A)` or `(+D)`.
    - Draft a `QUIZFRAGE` card following `QUIZFRAGE Card Selection and Wording`.
+   - Draft a two-part connector, such as `je … desto`, as one card per part, writing on each front the part followed by `(IN <whole connector>)`, e.g. `je (IN je … desto)` and `desto (IN je … desto)`.
 4. Draft each English translation as its own card, e.g. `a` → `b` and `a` → `c`, and apply these rules to each:
    - Synthesize the best translation from every source in `Translation Source Ranking`, trusting them in that ranking's order without discarding a lower source just because a higher one has an answer.
    - Use the shortest common equivalent that translates back to this German word, not to a near-synonym, in US spelling, e.g. `to organize`, not `to organise`. If the meaning depends on context, add one card per common sense, as few as cover them.
@@ -96,6 +97,7 @@ Category abbreviations the input may use:
 ## Category Names
 
 - Create or rename a category in `CardCategory` and `CATEGORY_TO_FORMAT` in `scripts/shared.py`, never only in a drafted card.
+- Name no specific category in a rule added to this skill; describe the cards it covers by what they test, since `list` is the only source of category names and a rename would leave a named rule stale.
 - Write a category name as upper-case German grammar terms with umlauts kept, naming the front's item before what the back tests, e.g. `PRÄPOSITION REKTION`.
 - Pick the precise grammar term over a word with an everyday meaning, e.g. `ADVERBIALE ANGABE` over `ANGABE`.
 - Join two tested properties in a category name with ` ⋀ `, e.g. `ARTIKEL ⋀ PLURAL`, and put its scope or answer options in parentheses, e.g. `KONJUGATION (ICH/DU/ES)`.
