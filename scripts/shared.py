@@ -39,6 +39,7 @@ class CardCategory(enum.StrEnum):
     REFLEXIVPRONOMEN_DATIV = "REFLEXIVPRONOMEN ⋀ DATIV"
     SUFFIX_ARTIKEL_MIT_AUSNAHMEN = "SUFFIX-ARTIKEL (MIT AUSNAHMEN)"
     TEMPORALE_PRAEPOSITION_BEDEUTUNG = "TEMPORALE PRÄPOSITION BEDEUTUNG"
+    VERB_ADJEKTIVBILDUNG = "VERB ADJEKTIVBILDUNG (-BAR/-LICH/-ABEL)"
 
 
 class SuffixTagLanguage(enum.Enum):
@@ -165,6 +166,11 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     CardCategory.KOLLOKATION_VERB: CardFormat(
         template="{STR_GERMAN_1};{STR_GERMAN_2}",
         example="ein gutes Verhältnis zu jmdm.;haben",
+    ),
+    CardCategory.VERB_ADJEKTIVBILDUNG: CardFormat(
+        template="{VERB_PRESENT};{ADJEKTIV}",
+        example="lösen;lösbar | löslich",
+        back_alternatives=BackAlternatives.JOINED_BY_TRANSLATION_SEPARATOR,
     ),
 }
 
