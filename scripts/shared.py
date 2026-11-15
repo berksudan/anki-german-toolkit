@@ -30,6 +30,9 @@ class CardCategory(enum.StrEnum):
     KONJUGATION_ICH_DU_ES = "KONJUGATION (ICH/DU/ES)"
     KONJUGATION_WIR_IHR_SIE = "KONJUGATION (WIR/IHR/SIE)"
     KONJUNKTIV_II_ICH_ES = "KONJUNKTIV II (ICH/ES)"
+    KONNEKTOR_WORTSTELLUNG = (
+        "KONNEKTOR WORTSTELLUNG (POSITION 0/POSITION 1/VERB AM ENDE)"
+    )
     LOKALE_PRAEPOSITION_BEDEUTUNG = "LOKALE PRÄPOSITION BEDEUTUNG"
     PRAEPOSITIONALERGAENZUNG_AKK_DATIV = "PRÄPOSITIONALERGÄNZUNG (AKKUSATIV/DATIV)"
     PRAEPOSITION_REKTION = "PRÄPOSITION REKTION"
@@ -155,6 +158,11 @@ CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
     ),
     CardCategory.ADVERBIALE_ANGABE_TEKAMOLO: CardFormat(
         template="{STR_GERMAN_1};{STR_GERMAN_2}", example="nach dem Essen;TE (Temporal)"
+    ),
+    CardCategory.KONNEKTOR_WORTSTELLUNG: CardFormat(
+        template="{STR_GERMAN_1};{STR_GERMAN_2}",
+        example="doch;POSITION 0 (zB. „Wir sind klein, doch wir haben andere Stärken.“) | POSITION 1 (zB. „Wir sind klein, doch haben wir andere Stärken.“)",
+        back_alternatives=BackAlternatives.JOINED_BY_TRANSLATION_SEPARATOR,
     ),
     CardCategory.KOLLOKATION_VERB: CardFormat(
         template="{STR_GERMAN_1};{STR_GERMAN_2}",
