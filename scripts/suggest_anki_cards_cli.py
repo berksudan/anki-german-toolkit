@@ -5,7 +5,11 @@ import typing
 
 import pydantic
 
-from scripts.azure_translator import fetch_dictionary_translations
+from scripts.azure_translator import (
+    BackTranslation,
+    DictionaryTranslation,
+    fetch_dictionary_translations,
+)
 from scripts.card_draft import DRAFT_CARD_CHECKS_DESCRIPTION, DraftCard
 from scripts.shared import (
     CATEGORY_TO_FORMAT,
@@ -64,22 +68,44 @@ def _print_validated_table(*, drafts_json: str) -> None:
         )
 
 
+def _format_back_translation(*, back_translation: BackTranslation) -> str:
+    return f"{back_translation.display_text} ({back_translation.frequency_count})"
+
+
+def _format_other_leading_back_translation(
+    *, german_word: str, translation: DictionaryTranslation
+) -> str:
+    leading_back_translation = max(
+        translation.back_translations, key=lambda back: back.frequency_count
+    )
+    if leading_back_translation.display_text.casefold() == german_word.casefold():
+        return ""
+    return _format_back_translation(back_translation=leading_back_translation)
+
+
 def _print_translation_suggestions(
     *, german_words: collections.abc.Collection[str]
 ) -> None:
     translations_by_word = fetch_dictionary_translations(german_words=german_words)
     for word, translations in translations_by_word.items():
         print(f"**{word}**\n")
-        print("| Translation | Part of speech | Confidence | Back-translations |")
-        print("| --- | --- | ---: | --- |")
+        print(
+            "| Translation | Part of speech | Confidence | Back-translations"
+            " | Back-translations led by another word |"
+        )
+        print("| --- | --- | ---: | --- | --- |")
         for translation in translations:
             back_translations = ", ".join(
-                f"{back.display_text} ({back.frequency_count})"
+                _format_back_translation(back_translation=back)
                 for back in translation.back_translations
+            )
+            other_leading_back_translation = _format_other_leading_back_translation(
+                german_word=word, translation=translation
             )
             print(
                 f"| {translation.display_target} | {translation.pos_tag}"
-                f" | {translation.confidence:.0%} | {back_translations} |"
+                f" | {translation.confidence:.0%} | {back_translations}"
+                f" | {other_leading_back_translation} |"
             )
         print()
 
@@ -98,9 +124,10 @@ def _dispatch_command_from_cli() -> None:
             "`preview JSON`: validate the same input as `build` and print the "
             "cards as a Markdown table with Category, Front and Back columns. "
             "`lookup WORD...`: print a Markdown table of Azure dictionary "
-            "translations per German word with part of speech, confidence and "
-            "back-translations with their frequency counts (needs the "
-            "variables from `.env`)."
+            "translations per German word with part of speech, confidence, "
+            "back-translations with their frequency counts and, when another "
+            "German word is the most frequent back-translation, that word "
+            "(needs the variables from `.env`)."
         )
     )
     parser.add_argument("command", choices=[command.value for command in _Command])
