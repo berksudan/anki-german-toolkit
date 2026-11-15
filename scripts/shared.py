@@ -86,6 +86,9 @@ class CardFormat:
 
 
 CATEGORY_TO_FORMAT: dict[CardCategory, CardFormat] = {
+    CardCategory.ABKUERZUNG: CardFormat(
+        template="{STR_GERMAN_1};{STR_GERMAN_2}", example="Whg.;Wohnung"
+    ),
     CardCategory.ARTIKEL_PLURAL: CardFormat(
         template="{NOUN_SINGULAR};{ARTIKEL} {NOUN_SINGULAR}, {OPTIONAL_PLURAL}",
         example="Brot;das Brot, die Brote",
