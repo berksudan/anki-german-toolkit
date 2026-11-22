@@ -56,12 +56,11 @@ Category abbreviations the input may use:
 8. Print one Markdown table covering every entry with a translation, one row per translation, with the bold header `| **Entry** | **Translation** | **Why** | **DEU** | **ENG** |`; in each row put the card's front in bold, the translation, one short sentence justifying it, and one example sentence with its English translation, taken from the German uses that `Translation Usage Test` ran on, with the entry and its translation in `***…***`.
 9. Pass the trimmed cards as one JSON argument to `just cards-build` (see `just cards-build --help` for the input), fix any card it rejects, and print its output unchanged in one code block. Do not edit repository files.
 10. Ask for approval with single-select `AskUserQuestion` questions:
-   - Ask each yes/no choice left for the user, such as whether to add a card for another common use of an entry, as its own question with the options `Yes` and `No`, in the same call as the approval question and before it.
-   - When the yes/no choices don't all fit beside the approval question within `AskUserQuestion`'s limit of 4 questions per call, ask all of them first in earlier calls of up to 4 questions each, revise from the relevant step on each `Yes`, and then ask the approval question alone.
-   - Before asking the approval question, find which clipboard command the current environment provides, so copying the `build` output after `Approve` runs at once.
-   - Ask whether the user approves the cards as the last question, with the options `Approve` and `Chat about this` and, as the preview of both options, the output of `just cards-preview` run on the same JSON as `build`, unchanged.
-   - Copy the `build` output to the clipboard, keeping the tabs and without a trailing newline, only when the user picks `Approve` and no other answer asks for a change.
-   - When any answer asks for a change, copy nothing: after `Chat about this`, wait for the user's feedback in the chat, and take a typed `Other` answer as feedback; then revise from the relevant step and ask again.
+   - Ask each yes/no choice left for the user, such as whether to add a card for another common use of an entry, as its own question with the options `Yes` and `No`, in calls of up to 4 questions each, and revise from the relevant step on each `Yes` before asking the approval question.
+   - Before asking the approval question, write the final `build` output to a temporary file outside the repository and pick the clipboard command the current environment provides that copies that file with its tabs and without a trailing newline, so copying after `Approve` takes one command.
+   - Ask whether the user approves the cards as the only question in its call, with the options `Approve` and `Chat about this` and, as the preview of both options, the output of `just cards-preview` run on the same JSON as `build`, unchanged.
+   - After `Approve`, run the clipboard command picked for the `build` output file as the next tool call, with no other step before it.
+   - When an answer asks for a change, copy nothing: after `Chat about this`, wait for the user's feedback in the chat, and take a typed `Other` answer to any question as feedback; then revise from the relevant step and ask again.
 
 ## Translation Source Ranking
 
