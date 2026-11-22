@@ -8,6 +8,7 @@ allowed-tools:
   - Bash(just cards-lookup *)
   - Bash(just cards-preview *)
   - Bash(just duden *)
+  - Bash(xclip *)
 ---
 
 # Suggest Anki Cards
